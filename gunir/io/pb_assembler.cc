@@ -1,7 +1,6 @@
 // Copyright (C) 2015. The Gunir Authors. All rights reserved.
 // Author: An Qin (anqin.qin@gmail.com)
 //
-// Created: 04/12/12
 // Description:
 
 #include "gunir/io/pb_assembler.h"

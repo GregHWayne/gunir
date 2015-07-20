@@ -2,7 +2,7 @@
 // Author: An Qin (anqin.qin@gmail.com)
 //
 //
-// Created: 03/21/12
+//
 // Description:
 
 #include "gunir/io/pb_dissector.h"

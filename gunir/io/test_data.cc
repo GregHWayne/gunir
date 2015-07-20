@@ -1,7 +1,6 @@
 // Copyright (C) 2015. The Gunir Authors. All rights reserved.
 // Author: An Qin (anqin.qin@gmail.com)
 //
-// Created: 05/07/12
 
 #include "gunir/io/test_data.h"
 

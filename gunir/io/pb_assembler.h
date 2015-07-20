@@ -1,7 +1,6 @@
 // Copyright (C) 2015. The Gunir Authors. All rights reserved.
 // Author: An Qin (anqin.qin@gmail.com)
 //
-// Created: 04/12/12
 // Description:
 
 #ifndef GUNIR_IO_PB_ASSEMBLER_H

@@ -1,7 +1,6 @@
 // Copyright (C) 2015. The Gunir Authors. All rights reserved.
 // Author: An Qin (anqin.qin@gmail.com)
 //
-// Created: 06/12/12
 
 #ifndef GUNIR_IO_SLICE_COLUMN_READER_H
 #define GUNIR_IO_SLICE_COLUMN_READER_H

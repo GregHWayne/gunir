@@ -1,7 +1,7 @@
 // Copyright (C) 2015. The Gunir Authors. All rights reserved.
 // Author: An Qin (anqin.qin@gmail.com)
 //
-// Created: 04/13/12
+//
 // Description:
 
 #ifndef GUNIR_IO_AUTOMATON_H

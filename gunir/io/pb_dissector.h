@@ -2,7 +2,6 @@
 // Author: An Qin (anqin.qin@gmail.com)
 //
 //
-// Created: 03/20/12
 // Description:
 
 #ifndef GUNIR_IO_PB_DISSECTOR_H

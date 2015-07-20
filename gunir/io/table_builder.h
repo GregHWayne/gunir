@@ -1,7 +1,6 @@
 // Copyright (C) 2015. The Gunir Authors. All rights reserved.
 // Author: An Qin (anqin.qin@gmail.com)
 //
-// Created 03/21/12
 
 #ifndef GUNIR_IO_TABLE_BUILDER_H
 #define GUNIR_IO_TABLE_BUILDER_H
