@@ -1,0 +1,188 @@
+package gunir.compiler;
+
+enum OrderType {
+    kAsc = 1;
+    kDesc = 2;
+};
+
+enum Operators {
+    kAdd = 1;
+    kSub = 2;
+    kMul = 3;
+    kDiv = 4;
+    kRemainder = 5;
+
+    kLogicalAnd = 6;
+    kLogicalOr = 7;
+    kLogicalNot = 8;
+
+    kBitwiseAnd = 9;
+    kBitwiseOr = 10;
+    kBitwiseNot = 11;
+
+    kBitwiseXor = 12;
+    kBitwiseLeftShift = 13;
+    kBitwiseRightShift = 14;
+
+    kContains = 15;
+
+    kGreaterEqual = 16;
+    kGreater = 17;
+    kLessEqual = 18;
+    kLess = 19;
+    kEqual = 20;
+    kNotEqual = 21;
+};
+
+enum JoinOperator {
+    kInner = 1;
+    kLeftOuter = 2;
+};
+
+message StringMessage {
+    required string char_string = 1;
+};
+
+message ColumnPath {
+    repeated StringMessage field_list = 1;
+    optional bool has_distinct = 2;
+};
+
+message ColumnPathList {
+    repeated ColumnPath path_list = 1;
+};
+
+message OrderColumnPath {
+    required ColumnPath path = 1;
+    required OrderType type = 2;
+};
+
+message OrderColumnPathList {
+    repeated OrderColumnPath path_list = 1;
+};
+
+message RawAtomicExpression {
+    optional RawFunction function = 1;
+    optional int64 integer = 2;
+    optional double floating = 3; 
+    optional bool boolean = 4;
+    optional StringMessage char_string = 5;
+    optional ColumnPath column = 6;
+    optional RawExpression expression = 7;
+};
+
+message RawExpression {
+    optional RawExpression left = 1;
+    optional RawExpression right = 2;
+    optional RawAtomicExpression atomic = 3;
+    optional Operators op = 4;
+};
+
+message RawExpressionList {
+    repeated RawExpression expr_list = 1;
+};
+
+message RawArguments {
+    optional RawExpressionList arg_list = 1;
+    required bool arg_is_star = 2;
+};
+
+message RawFunction {
+    required StringMessage function_name = 1;
+    required RawArguments args = 2;
+};
+
+message RawJoin {
+    required RawTable partner = 1;
+    required RawExpression expression = 2;
+    required JoinOperator op = 3;
+};
+
+message Limit {
+    optional int32 start = 1;
+    required int32 number = 2;
+};
+
+message RawWithin {
+    required bool is_record = 1;
+    optional ColumnPath column = 2;
+};
+
+message RawTarget {
+    required RawExpression expression = 1;
+    optional RawWithin within = 2;
+    optional StringMessage alias = 3;
+};
+
+message RawTargetList {
+    repeated RawTarget target_list = 1;
+    required bool target_is_star = 2;
+};
+
+message RawTable {
+    optional StringMessage table_name = 1;
+    optional SelectStmt select_stmt = 2;
+    optional StringMessage alias = 9;
+};
+
+message RawTableList {
+    repeated RawTable table_list = 1;
+};
+
+message SelectStmt {
+    required RawTargetList target_list = 1;
+    required RawTableList from_list = 2;
+    optional RawExpression where_clause = 3; 
+    optional RawJoin join = 4;
+    optional ColumnPathList groupby = 5;
+    optional RawExpression having = 6;
+    optional OrderColumnPathList orderby = 7;
+    optional Limit limit = 8;
+};
+
+message CreateTableStmt {
+    required StringMessage table_name = 1;
+    required StringMessage input_path = 2;
+    required StringMessage table_schema = 3;
+    required StringMessage message_name = 4;
+    optional StringMessage charset_encoding = 5;
+    optional StringMessage table_type = 6;
+};
+
+message DefineTableStmt {
+    required StringMessage table_name = 1;
+    required StringMessage input_path = 2;
+};
+
+message DropTableStmt {
+    required StringMessage table_name = 1;
+};
+
+message ShowStmt {
+    optional StringMessage table_name = 1;
+};
+
+message HelpStmt {
+    optional StringMessage cmd_name = 1;
+};
+
+message QuitStmt {
+    optional StringMessage cmd_name = 1;
+};
+
+message HistoryStmt {
+    optional int32 start = 1;
+    optional int32 size = 2;
+};
+
+message QueryStmt {
+    optional SelectStmt select = 1;
+    optional CreateTableStmt create = 2;
+    optional DropTableStmt drop = 3;
+    optional HelpStmt help = 4;
+    optional ShowStmt show = 5;
+    optional HistoryStmt history = 6;
+
+    optional QuitStmt quit = 7;
+    optional DefineTableStmt define = 8;
+};

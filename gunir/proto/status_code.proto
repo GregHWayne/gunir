@@ -1,0 +1,54 @@
+package gunir;
+
+enum StatusCode {
+    Unknown = 1;
+    // master
+    kMasterNotInited = 12;
+    kMasterIsBusy = 13;
+    kMasterIsSecondary = 14;
+    kMasterIsReadonly = 15;
+    kMasterOnRestore = 16;
+    kMasterOnWait = 17;
+    kMasterIsRunning = 19;
+
+    // server node
+    kServerNotInited = 22;
+    kServerIsBusy = 23;
+    kServerIsIniting = 24;
+    kServerTimeout = 26;
+    kServerIsRunning = 29;
+    
+    // ACL & system
+    kIllegalAccess = 71;
+    kNotPermission = 72;
+    kIOError = 73;
+
+    //// master rpc ////
+    kMasterOk = 200;
+    kMasterOnWork = 201;
+
+    // register
+    kInvalidSequenceId = 304;
+    kInvalidServerInfo = 305;
+
+    // report
+    kServerNotRegistered = 306;
+    kServerNotExist = 307;
+    
+    // cmdctrl
+    kInvalidArgument = 310;
+
+    // response
+    kServerOk = 40;
+
+    // meta table
+    kMetaError = 500;
+
+    // RPC
+    kRPCError = 700;
+    kServerError = 701;
+    kConnectError = 703;
+    kRPCTimeout = 704;
+
+}
+

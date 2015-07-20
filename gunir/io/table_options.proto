@@ -1,0 +1,16 @@
+package gunir.io;
+
+import "gunir/io/tablet_schema.proto";
+
+message URI {
+    required string uri = 1;
+    optional uint64 offset = 2;
+    optional uint64 length = 3;
+}
+
+message TableOptions {
+    repeated URI input_files = 1;
+    required SchemaDescriptor schema_descriptor = 2;
+    required string output_file = 3;  // output file name
+    required string output_table = 4;  // output table name
+}

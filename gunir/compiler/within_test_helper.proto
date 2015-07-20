@@ -1,0 +1,35 @@
+package gunir.compiler.within;
+
+message Language {
+  optional int64 cnt_lang_code = 1;
+}
+
+message Links {
+  optional double sum_bwd = 1;
+}
+
+message Name {
+  optional int64 cnt_name_code = 1;
+  repeated Language language = 2;
+}
+
+message MultiLevelAggregate {
+  required int64 docid = 1;
+  optional int64 max_bwd = 2;
+  optional Links links = 3;
+  optional int64 cnt_record_code = 4;
+  repeated Name name = 5;
+}
+
+message AggregateForward {
+    required int64 docid = 1;
+    optional int64 max_fwd = 2;
+    optional int64 min_fwd = 3;
+    optional double avg_fwd = 4;
+    optional double sum_fwd = 5;
+    optional int64 count_fwd = 6;
+}
+
+message Test {
+    required bytes content = 1;
+}

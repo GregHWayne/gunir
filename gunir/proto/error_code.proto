@@ -1,0 +1,8 @@
+package gunir;
+
+enum ErrorCode {
+    kOk = 0;
+
+    kBufNotEnough = 1;
+    kParserError = 2;
+}

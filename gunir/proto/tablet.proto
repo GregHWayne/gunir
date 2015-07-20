@@ -1,0 +1,6 @@
+package gunir;
+
+message TabletInfo {
+    required string name = 1;
+    repeated uint32 ip = 2;
+}

@@ -1,0 +1,15 @@
+message LogMessage {
+    // single file info
+    required string program_name = 1;
+    required string hostname = 2;
+    required string username = 3;
+    required uint32 pid = 4;
+    // single message info
+    required string severity = 5;
+    required string mmdd = 6;
+    required string time = 7;
+    required uint32 thread_id = 8;
+    required string file = 9;
+    required uint32 file_line = 10;
+    required string msg = 11;
+}

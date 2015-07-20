@@ -1,0 +1,41 @@
+cc_test(
+    name = 'slice_test',
+    srcs = ['slice_test.cc'],
+    deps = [
+        '//common/file:local_file',
+        '//gunir/io/testdata:document_proto',
+        '//gunir/io:slice_writer',
+        '//gunir/io:io_test_helper',
+        '//gunir/io:tablet_reader',
+        '//thirdparty/gtest:gtest',
+    ],
+    testdata = [
+        'testdata/document.proto',
+    ]
+)
+
+cc_test(
+    name = 'io_data_operation_test',
+    srcs = [
+        'io_data_operation_test.cc'
+    ],
+    deps = [
+        '//common/file:local_file',
+        '//common/system/time:time',
+        '//gunir/io/testdata:document_proto',
+        '//gunir/compiler/parser:select_stmt_proto',
+        '//gunir/io:io',
+        '//gunir/io:io_test_helper',
+        '//gunir/io:pb_assembler',
+        '//gunir/io:table_builder',
+        '//gunir/utils:create_table_tool',
+        '//gunir/utils:create_table_mapreduce',
+        '//gunir/utils:filename_tool',
+        '//gunir/utils:proto_message',
+    ],
+    testdata = [
+        'testdata/document.proto',
+        'anthonyqin_private_key.dat',
+    ],
+    heap_check = 'local',
+)

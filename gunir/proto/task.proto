@@ -1,0 +1,77 @@
+import "gunir/proto/tablet.proto";
+import "gunir/compiler/parser/plan.proto";
+
+package gunir;
+
+enum TaskType {
+    kInterTask = 1;
+    kLeafTask = 2;
+    kUnknownTask = 3;
+}
+
+enum TaskStatus {
+    kNewTask = 1;
+    kFailedTask = 2;
+    kRunningTask = 3;
+    kCompletedTask = 4;
+    kFailedComputeTask = 5;
+    kFailedSendTask = 6;
+    kCanceledTask = 7;
+    kResultManagerOOMTask = 8;
+    kInterResultOOMTask = 9;
+    kLeafResultOOMTask = 10;
+    kTaskFailedAfterRetry = 11;
+    kUnknownStatus = 20;
+}
+
+message TaskInfo {
+    required TaskType type = 1; 
+    required uint32 task_id = 2;
+    required uint32 attempt_id = 3;
+    required uint64 job_id = 4;
+    required uint32 server_id = 5;
+    required string server_addr = 6;
+    optional TaskStatus task_status = 7;
+}
+
+message TaskState {
+    required TaskInfo task_info = 1;
+    repeated string result_tablet_files = 2;
+    optional int64 result_slice_number = 3;
+    optional int64 result_file_size = 4;
+}
+
+message InterTaskInput {
+    required compiler.PlanProto exec_plan = 1;
+    repeated uint32 child_task_id = 2;
+    required TaskType child_type = 3;
+    required string result_proto = 4;
+    required string result_message = 5;
+    optional double task_precision = 6;
+}
+
+message ScannerInput {
+    required TabletInfo tablet = 1;
+    repeated string column_names = 2;
+}
+
+message LeafTaskInput {
+    required compiler.PlanProto exec_plan = 1;
+    required string result_proto = 2;
+    required string result_message = 3;
+    repeated ScannerInput scanner_input = 4;
+}
+
+message InterTaskSpec {
+    required TaskInfo task_info = 1;
+    optional TaskInfo parent_task_info = 2;
+    required InterTaskInput task_input = 3;
+}
+
+message LeafTaskSpec {
+    required TaskInfo task_info = 1;
+    required TaskInfo parent_task_info = 2;
+
+    required LeafTaskInput task_input = 3;
+}
+

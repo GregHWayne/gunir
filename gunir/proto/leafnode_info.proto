@@ -1,0 +1,8 @@
+import "gunir/proto/status_code.proto";
+
+package gunir;
+
+message LeafNodeInfo {
+    required string addr = 1;
+    required StatusCode status = 2; 
+}

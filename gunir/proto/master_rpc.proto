@@ -1,0 +1,107 @@
+import "trident/rpc_option.proto";
+import "gunir/proto/status_code.proto";
+import "gunir/proto/server_info.proto";
+import "gunir/proto/job.proto";
+import "gunir/proto/task.proto";
+import "gunir/proto/table.proto";
+import "gunir/compiler/parser/select_stmt.proto";
+
+package gunir;
+
+message SubmitJobRequest {    
+    required uint64 sequence_id = 1;
+    required JobSpecification job_spec = 2;
+}
+
+message SubmitJobResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    optional string reason = 3;
+    required uint64 job_id = 4;
+    required JobStatus job_status = 5;
+}
+
+message GetJobResultRequest {
+    required uint64 sequence_id = 1;
+    required uint64 job_id = 2;
+}
+
+message GetJobResultResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    optional string reason = 3;
+    required JobResult result = 4;
+}
+
+message GetMetaInfoRequest {
+    required uint64 sequence_id = 1;
+    repeated string table_names = 2;
+}
+
+message GetMetaInfoResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    optional string reason = 3;
+    repeated TableInfo table_infos = 4;
+    repeated TableStatusCode results = 5;
+}
+
+message AddTableRequest {
+    required uint64 sequence_id = 1;
+    repeated TableInfo table_infos = 2;
+    optional compiler.CreateTableStmt create = 3;
+    optional bool is_created = 4; 
+}
+
+message AddTableResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    optional string reason = 3;
+    repeated TableStatusCode results = 4;
+}
+
+message DropTableRequest {
+    required uint64 sequence_id = 1;
+    repeated string table_names = 2;
+}
+
+message DropTableResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    repeated TableStatusCode results = 3;
+}
+
+message RegisterRequest {
+    required uint64 sequence_id = 1;
+    required ServerInfo server_info = 2;    
+}
+
+message RegisterResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message ReportRequest {
+    required uint64 sequence_id = 1;
+    required ServerInfo server_info = 2;
+    repeated TaskState task_state = 3;
+}
+
+message ReportResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    repeated uint64 finished_job_id = 3;
+}
+
+service MasterServer {
+    rpc SubmitJob(SubmitJobRequest) returns(SubmitJobResponse);
+    rpc GetJobResult(GetJobResultRequest) returns(GetJobResultResponse);
+    rpc GetMetaInfo(GetMetaInfoRequest) returns(GetMetaInfoResponse);
+    rpc AddTable(AddTableRequest) returns(AddTableResponse);
+    rpc DropTable(DropTableRequest) returns(DropTableResponse);
+
+    rpc Register(RegisterRequest) returns(RegisterResponse);
+    rpc Report(ReportRequest) returns(ReportResponse);
+}
+
+option cc_generic_services = true;

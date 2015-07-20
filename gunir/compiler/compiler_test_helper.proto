@@ -1,0 +1,22 @@
+message Student {
+    required int64 student_id = 1;
+    required int64 grade = 2;
+    required int64 department_id = 3;
+    required int64 score = 4;
+}
+
+message Department {
+    required int64 department_id = 1;
+    required int64 institute_id = 2;
+
+    required int64 cnt_student = 3;
+    required int64 sum_id = 4;
+    required int64 avg_id = 5;
+    required int64 sum_age = 6;
+    required int64 avg_age = 7;
+    required int64 max_age = 8;
+    required int64 min_age = 9;
+
+    repeated int64 student_id = 10;
+    repeated int64 student_age = 11;
+}

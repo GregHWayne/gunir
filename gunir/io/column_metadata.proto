@@ -1,0 +1,38 @@
+package gunir.io;
+
+message ColumnStaticInfo {
+    required uint32 column_index = 1;
+    required string column_name = 2;
+    required ColumnType column_type = 3;
+    required uint32 max_repetition_level = 4;
+    required uint32 max_definition_level = 5;
+}
+
+message ColumnDynamicInfo {
+    required fixed64 start_position = 1;
+    required fixed32 length = 2;
+}
+
+message ColumnMetaData {
+    required ColumnStaticInfo static_info = 1;
+    required ColumnDynamicInfo dynamic_info = 2;
+}
+
+enum ColumnType {
+    TYPE_UNDEFINED = 1;
+    TYPE_INT32 = 2;
+    TYPE_INT64 = 3;
+    TYPE_UINT32 = 4;
+    TYPE_UINT64 = 5;
+    TYPE_SINT32 = 6;
+    TYPE_SINT64 = 7;
+    TYPE_FIXED32 = 8;
+    TYPE_FIXED64 = 9;
+    TYPE_SFIXED32 = 10;
+    TYPE_SFIXED64 = 11;
+    TYPE_FLOAT = 12;
+    TYPE_DOUBLE = 13;
+    TYPE_BOOL = 14;
+    TYPE_STRING = 15;
+    TYPE_BYTES = 16;
+}

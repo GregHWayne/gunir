@@ -1,0 +1,193 @@
+import "gunir/proto/tablet.proto";
+import "gunir/compiler/parser/select_stmt.proto";
+import "google/protobuf/descriptor.proto";
+
+package gunir.compiler;
+message ConstExpressionProto {
+    optional string string_ = 1;
+    optional int32 int32_ = 2;
+    optional uint32 uint32_ = 3;
+    optional int64 int64_ = 4;
+    optional uint64 uint64_ = 5;
+    optional float  float_ = 6;
+    optional double  double_ = 7;
+    optional bool bool_ = 8;
+    optional bytes bytes_ = 9;
+
+    required google.protobuf.FieldDescriptorProto.Type type = 10;
+};
+
+message ColumnExpressionProto {
+    required google.protobuf.FieldDescriptorProto.Label label = 1;
+    required google.protobuf.FieldDescriptorProto.Type type = 2;
+    required uint32 column_number = 3;
+    required uint32 repeat_level = 4;
+    required uint32 define_level = 5;
+    required uint64 affect_id = 6;
+
+    repeated string column_path = 7;
+    required string table_name = 8;
+    required string column_path_string = 9;
+    required bool is_distinct = 10;
+};
+
+message OperatorExpressionProto {
+    required ExpressionProto left = 1;
+    optional ExpressionProto right = 2;
+    required Operators op = 3;
+    required google.protobuf.FieldDescriptorProto.Type return_type = 4; 
+};
+
+message FunctionExpressionProto {
+    required string fn_name = 1; 
+    repeated ExpressionProto expr_list = 2;
+    required google.protobuf.FieldDescriptorProto.Type return_type = 3; 
+    optional uint32 agg_id = 4;
+    required bool is_distinct = 5;
+};
+
+message ExpressionProto {
+    enum ExpressionType {
+        kConst = 1;
+        kColumn = 2;
+        kOperator = 3;
+        kFunction = 4;
+        kAggFunction = 5;
+    }
+
+    optional ConstExpressionProto const = 1;
+    optional ColumnExpressionProto column = 2;
+    optional OperatorExpressionProto operator = 3;
+    optional FunctionExpressionProto function = 4;
+    required ExpressionType type = 5;
+};
+
+message ColumnInfoProto {
+    required string name = 1;
+    required google.protobuf.FieldDescriptorProto.Type type = 2;
+};
+
+message UnionPlanProto {
+    repeated PlanProto subplan_list = 1;
+};
+
+message MergePlanProto {
+    repeated PlanProto subplan_list = 1;
+    repeated uint64 affect_id = 2;
+    repeated OrderType type = 3; 
+};
+
+message JoinTable {
+    required PlanProto subplan = 1;
+    repeated int64 affect_id = 2;
+};
+
+message JoinPlanProto {
+    required JoinTable left_table = 1;
+    required JoinTable right_table = 2;
+    required ExpressionProto join_expr = 3;
+    required JoinOperator type = 4;
+};
+
+message ScanPlanProto {
+    optional string table_name = 1;
+    optional TabletInfo tablet = 2;
+    repeated ColumnInfoProto column_info_list = 3;
+    repeated uint64 affect_ids = 4;
+    repeated ColumnInfoProto affect_column_list = 5;
+};
+
+message FilterPlanProto {
+    required PlanProto subplan = 1;
+    required ExpressionProto filter_expr = 2;
+};
+
+message OrderByInfo {
+    required uint64 affect_id = 1;
+    required OrderType type = 2; 
+};
+
+message SortPlanProto {
+    required PlanProto subplan = 1;
+    repeated OrderByInfo orderby_info_list = 2;
+};
+
+message UniqPlanProto {
+    required PlanProto subplan = 1;
+    repeated uint32 distinct_column = 2;
+};
+
+message AggregatePlanProto {
+    enum AggregateMode {
+        kLocalAgg = 1; // Leaf servers
+        kMergeAgg = 2; // Middle Inter Servers
+        kFinalAgg = 3; // Root Inter server
+        kNotParallel = 4; // Client test
+    };
+
+    required PlanProto subplan = 1;
+    required AggregateMode mode = 2;
+    repeated google.protobuf.FieldDescriptorProto.Type subplan_tuple_types = 3;
+    repeated ExpressionProto target_expr_list = 4;
+    repeated OrderByInfo orderby_info_list = 5;
+    repeated int32 final_define_level = 6;
+};
+
+message ProjectionPlanProto {
+    required PlanProto subplan = 1;
+    repeated google.protobuf.FieldDescriptorProto.Type subplan_tuple_types = 2;
+    repeated ExpressionProto target_expr_list = 3;
+    repeated uint32 target_define_level = 4;
+    repeated int32 deepest_column_affect_id = 5;
+};
+
+message WithinPlanProto {
+    required PlanProto subplan = 1;
+    repeated google.protobuf.FieldDescriptorProto.Type subplan_tuple_types = 2;
+    repeated ExpressionProto target_expr_list = 3;
+    repeated uint32 target_define_level = 4;
+    repeated uint32 target_within_level = 5;
+    repeated int32 deepest_column_affect_id = 6;
+};
+
+message LimitPlanProto {
+    required PlanProto subplan = 1;
+    required int64 start = 2;
+    required int64 number = 3;
+};
+
+message PlanProto {
+    enum PlanType {
+        kScan = 1;
+        kFilter = 2;
+        kProjection = 3;
+        kLimit = 4;
+        kUnion = 5;
+        kWithin = 6;
+        kSort = 7;
+        kUniq = 8;
+        kMerge = 9;
+        kAggregate = 10;
+        kJoin = 11;
+    };
+
+    required PlanType type = 1;
+    optional ScanPlanProto scan = 2;
+    optional FilterPlanProto filter = 3;
+    optional ProjectionPlanProto projection = 4;
+    optional LimitPlanProto limit = 5;
+    optional UnionPlanProto union = 6;
+    optional WithinPlanProto within = 7;
+    optional SortPlanProto sort = 8;
+    optional UniqPlanProto uniq = 9;
+    optional MergePlanProto merge = 10;
+    optional AggregatePlanProto aggregate = 11;
+    optional JoinPlanProto join = 12;
+};
+
+message TaskPlanProto {
+    repeated TaskPlanProto sub_task_plan_list = 1;
+    required PlanProto exec_plan = 2; 
+    required string table_schema_string = 3;
+    required string table_message_name = 4;
+};

@@ -1,0 +1,37 @@
+import "gunir/proto/tablet.proto";
+
+package gunir;
+enum TableStatusCode {
+    kTableOk = 1;
+    kTableNotExist = 2;
+    kPermitDenied = 3;
+    kTableAlreadyExist = 4;
+    kTableCreating = 5;
+    kTableCorrupt = 6;
+    kTableDBError = 7;
+}
+
+enum AddHistoryStatusCode {
+    kAddOk = 1;
+}
+
+enum TablePermit {
+    kAllReadAndDrop = 1;
+    kAllRead = 2;
+    kUserReadAndDrop = 3;
+}
+
+message TableIdentity {
+    required string user = 1;
+    optional TablePermit permit = 2;
+}
+
+message TableInfo {
+    required string table_name = 1;
+    required string message_name = 2;
+    required string table_schema = 3;
+    repeated TabletInfo tablets = 4;
+    required int64 table_size = 5;
+    
+    optional TableIdentity identity = 7;
+}

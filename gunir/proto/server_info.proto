@@ -1,0 +1,16 @@
+import "gunir/proto/status_code.proto";
+
+package gunir;
+
+enum ServerType {
+    kStemServer = 1;
+    kLeafServer = 2;
+    kInvalidServer = 3;
+}
+
+message ServerInfo {
+    required ServerType type = 1;
+    required string addr = 2;
+    optional StatusCode status = 3;
+    optional uint32 slot_number = 4;
+}

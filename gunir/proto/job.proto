@@ -1,0 +1,78 @@
+import "gunir/proto/table.proto";
+import "gunir/compiler/parser/plan.proto";
+import "gunir/compiler/parser/select_stmt.proto";
+
+package gunir;
+
+enum JobStatus {
+    kJobSubmitSucceed = 1;
+    kJobAnalyseSucceed = 2;
+    kJobSchedulerSucceed = 3;
+    kJobEmitterSucceed = 4;
+    kJobRunning = 5;
+    kJobFinished = 6;
+
+    kJobNotExist = 7;
+    kJobAnalyseFailed = 8;
+    kJobSchedulerFailed = 9;
+    kJobRunFailed = 10;
+    kJobSubmitFailed = 11;
+}
+
+message JobProgressInfo {
+    optional int32 completed_leaf_task_num = 1;
+    optional int32 completed_inter_task_num = 2;
+    optional int32 total_leaf_task_num = 3;
+    optional int32 total_inter_task_num = 4;
+}
+
+message JobProgressTimeStamp {
+    optional int64 job_start_time = 1;
+    optional int64 job_analyse_finish_time = 2;
+    optional int64 job_schedule_finish_time = 3;
+    optional int64 job_emit_finish_time = 4;
+    optional int64 first_leaf_task_complete_time = 5;
+    optional int64 all_leaf_task_complete_time = 6;
+    optional int64 first_inter_task_complete_time = 7;
+    optional int64 all_inter_task_complete_time = 8;
+    optional int64 job_finish_time = 9;
+}
+
+message JobIdentity {
+    required string identity = 1;
+    required string role = 2;
+}
+
+message JobSpecification {
+    required string query = 1;
+    required compiler.QueryStmt query_stmt = 2;
+    required JobIdentity job_identity = 3;
+    repeated TableInfo table_info = 4;
+    required double job_precision = 5;
+}
+
+message JobInfo {
+    required uint64 job_id = 1;
+    required JobStatus job_status = 2;
+}
+
+message JobAnalyserResult {
+    required compiler.TaskPlanProto task_plan = 1;
+    optional string failed_reason = 2;
+}
+
+message JobResult {
+    required JobStatus job_status = 1;
+    optional string reason = 2;
+    optional JobProgressInfo progress_info = 3;
+    optional JobProgressTimeStamp job_timestamp = 4;
+    repeated string job_result_tablets = 5;
+    optional int64 result_slice_number = 6;
+    optional int64 result_file_size = 7;
+}
+
+message HistoryJob {                                                           
+    required JobSpecification job_spec = 1;                                    
+    required JobResult result = 2;
+    required int64 job_id = 3;
+} 

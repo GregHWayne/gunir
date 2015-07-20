@@ -1,0 +1,59 @@
+import "trident/rpc_option.proto";
+import "gunir/proto/task.proto";
+import "gunir/proto/status_code.proto";
+
+package gunir;
+
+message PushInterTaskRequest {
+    required uint64 sequence_id = 1;
+    repeated InterTaskSpec inter_spec = 2;
+}
+
+message PushInterTaskResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+message ReportTaskResultRequest {
+    required uint64 sequence_id = 1;
+    required TaskInfo task_info = 2;
+    required TaskInfo parent_task_info = 3;
+    required bytes content = 4;
+    optional bool finished = 5;
+}
+
+message ReportTaskResultResponse {
+    enum ResultCode {
+        kAccept = 1;
+        kReject = 2;
+    }
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    required ResultCode result = 3;
+}
+
+message ReportResultSizeRequest {
+    required uint64 sequence_id = 1;
+    required TaskInfo task_info = 2;
+    required TaskInfo parent_task_info = 3;
+    required uint64 size = 4;
+}
+
+message ReportResultSizeResponse {
+    enum ResultCode {
+        kAccept = 1;
+        kReject = 2;
+    }
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+    required ResultCode result = 3;
+}
+
+service StemNodeServer {
+    rpc PushInterTask(PushInterTaskRequest) returns(PushInterTaskResponse);
+
+    rpc ReportTaskResult(ReportTaskResultRequest) returns (ReportTaskResultResponse);
+    rpc ReportResultSize(ReportResultSizeRequest) returns(ReportResultSizeResponse);
+}
+
+option cc_generic_services = true;

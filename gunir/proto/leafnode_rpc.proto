@@ -1,0 +1,21 @@
+import "trident/rpc_option.proto";
+import "gunir/proto/task.proto";
+import "gunir/proto/status_code.proto";
+
+package gunir;
+
+message PushLeafTaskRequest {
+    required uint64 sequence_id = 1;
+    repeated LeafTaskSpec leaf_spec = 2;
+}
+
+message PushLeafTaskResponse {
+    required uint64 sequence_id = 1;
+    required StatusCode status = 2;
+}
+
+service LeafNodeServer {
+    rpc PushLeafTask(PushLeafTaskRequest) returns(PushLeafTaskResponse);
+}
+
+option cc_generic_services = true;

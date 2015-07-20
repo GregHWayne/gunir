@@ -1,0 +1,57 @@
+import "gunir/proto/task.proto";
+import "gunir/proto/server_info.proto";
+
+package gunir;
+
+message TaskServerPair {
+    required uint32 task_id = 1;
+    repeated uint32 task_ip = 2;
+    required uint32 server_id = 3;
+    required string server_addr = 4;
+}
+
+message SchedulerPlan {
+    enum SchedulerType {
+        kFullJobScheduler = 1;
+        kFailedTaskScheduler = 2;
+        kFailedEmitTaskScheduler = 3;
+    }
+    required uint64 job_id = 1;
+    required SchedulerType type = 2;
+    repeated TaskServerPair inter_pair = 3;
+    repeated TaskServerPair leaf_pair = 4;
+}
+
+message LeafNode {
+    required LeafTaskSpec task_spec = 1;
+}
+
+message InterNode {
+    required InterTaskSpec task_spec = 1;
+    repeated TaskTreeNode  child = 2;
+}
+
+message TaskTreeNode {
+    optional LeafNode leaf = 1;
+    optional InterNode inter = 2;
+}
+
+message EmitterPlan {
+    required uint64 job_id = 1;
+    required TaskTreeNode root_node = 2;
+}
+
+message ServerSchedulerInfo {
+    required uint32 id = 1;
+    required string server_addr = 2;
+    required uint32 server_ip = 3;
+    required uint32 left_slot_number = 4;
+    required uint32 reserve_slot_number = 5;
+}
+
+message SchedulerInfo {
+    repeated ServerSchedulerInfo inter_server = 1;
+    repeated ServerSchedulerInfo leaf_server = 2;
+    required uint32 total_inter_slot = 3;
+    required uint32 total_leaf_slot = 4;
+}
