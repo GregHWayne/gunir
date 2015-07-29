@@ -1,9 +1,0 @@
-[submodule "thirdparty"]
-	path = thirdparty
-	url = https://github.com/anqin/thirdparty
-[submodule "trident"]
-	path = trident
-	url = https://github.com/anqin/trident
-[submodule "toft"]
-	path = toft
-	url = https://github.com/anqin/toft
